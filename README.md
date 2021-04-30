@@ -37,7 +37,7 @@ Checked: 5192 @ 930/s, Found: 0
 Checked: 6142 @ 950/s, Found: 0
 ```
 
-If any accounts with balance are found (they won't be), you can see them logged the 'wallets' file:
+If any accounts with balance are found (they won't be), you can see them logged in the 'wallets' file:
 
 ```
 $ cat wallets
