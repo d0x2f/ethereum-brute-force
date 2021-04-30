@@ -74,7 +74,6 @@ async function main() {
   // When a job fails, log it and quit.
   queue.on("reject", (error) => {
     console.error(error);
-    queue.enqueue(() => checkRandomKey(web3));
     exit();
   });
 
