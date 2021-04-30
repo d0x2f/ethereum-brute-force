@@ -2,7 +2,8 @@ const { writeFile } = require("fs").promises;
 const Web3 = require("web3");
 const { randomBytes } = require("crypto");
 const Queue = require("queue-promise");
-const CONCURRENCY = 100;
+
+const CONCURRENCY = 40;
 
 async function recordFind(key, account, balance) {
   writeFile(

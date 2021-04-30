@@ -44,10 +44,12 @@ $ cat wallets
 cat: wallets: No such file or directory
 ```
 
-## Indicative Performance
+## Performance
 
 When I run this on my PC (i7-6700K), I get a check rate of around 1500/s.
 
 On an n2-standard-4 GCP instance I see ~1000/s.
+
+You can tweak the `CONCURRENCY` variable at the top of main.js to control how many promises can be pending at once.
 
 I haven't tried but you may be able to run multiple instances of the process to improve the check rate since nodejs is single threaded.
