@@ -3,12 +3,13 @@ const Web3 = require("web3");
 const { randomBytes } = require("crypto");
 const Queue = require("queue-promise");
 
-const CONCURRENCY = 40;
+const CONCURRENCY = 128;
 
-async function recordFind(key, account, balance) {
+async function recordFind(key, account, transactions, balance) {
+  const ethBalance = Web3.utils.fromWei(balance, 'ether');
   writeFile(
     "wallets",
-    `Key: ${key}, Address: ${account.address}, Balance: ${balance} gwei\n`,
+    `Key: ${key}, Address: ${account.address}, Transactions: ${transactions}, Balance: ${ethBalance} eth\n`,
     { flag: "a" }
   );
 }
@@ -17,15 +18,19 @@ async function checkRandomKey(web3) {
   // Generate a random 32 byte key
   const key = "0x" + randomBytes(32).toString("hex");
 
+  // Empty wallet with transactions, for testing
+  // const key = '0x000000000000000000000000000000000000000000000000000000000000000e';
+
   // Fetch the corresponding account
   const account = web3.eth.accounts.privateKeyToAccount(key);
 
-  // Check it's balance
-  const balance = await web3.eth.getBalance(account.address);
+  // Check it's transaction count (some may be erc20 token transactions)
+  const transactions = await web3.eth.getTransactionCount(account.address);
 
-  // If it has a balance, record it
-  if (balance > 0) {
-    await recordFind(key, account, balance);
+  // If it has transactions, get it's balance and record it
+  if (transactions > 0) {
+    const balance = await web3.eth.getBalance(account.address);
+    await recordFind(key, account, transactions, balance);
     return true;
   }
   return false;
